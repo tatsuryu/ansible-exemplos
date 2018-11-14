@@ -1,0 +1,19 @@
+ataulfo ansible_host=192.168.56.90 ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+naoizeste ansible_host=192.168.56.91 ansible_ssh_user=atanagildo ansible_ssh_pass=eibiciontotri
+
+[web]
+ataulfo
+
+[db]
+ataulfo
+
+[mysql:children]
+db
+
+[nadaaconte]
+ataulfo
+
+[all:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_port=22

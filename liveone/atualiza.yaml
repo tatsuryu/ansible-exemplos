@@ -1,0 +1,28 @@
+---
+- hosts: ataulfo
+  become: true
+  tasks:
+    - name: atualiza apt
+      apt:
+        name: sl
+        state: absent
+        update_cache: yes
+
+    - name: bananas em batatas
+      shell: echo "bananas" > /tmp/batatas
+      args:
+        creates: /tmp/batatas
+
+    - name: checa o uptime traveiz
+      shell: uptime
+      changed_when: false
+      register: blah
+
+    - name: armazena localmente os uptime
+      lineinfile:
+        path: /tmp/nadaaconteceuptime
+        regexp: "^{{ ansible_host }} {{ blah.stdout.split()[0:2] | join(' ') }}"
+        line: "{{ ansible_host }} {{ blah.stdout.split()[0:2] | join(' ') }}"
+        create: yes
+      delegate_to: localhost
+      become: false
