@@ -1,0 +1,7 @@
+- name: Instala apache2 no Debian
+  apt:
+    name: ['apache2','libapache2-mpm-itk', 'vim']
+    state: present
+    update_cache: yes
+    cache_valid_time: 90
+  when: ansible_distribution == 'Debian'

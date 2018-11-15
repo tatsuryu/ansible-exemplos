@@ -1,0 +1,6 @@
+---
+- name: blah
+  hosts: ataulfo
+  become: true
+  roles:
+    - exemplo

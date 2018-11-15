@@ -1,0 +1,41 @@
+---
+# tasks file for exemplo
+- name: Instala apache
+  include: apache.yaml
+
+- name: Cria usuario besta
+  user:
+    name: besta
+    comment: Ozuario besta
+
+- name: copiando nossa pagina
+  copy:
+    src: files/index.html
+    dest: /var/www/html/index.html
+    owner: besta
+    group: besta
+    mode: 0640
+
+- name: Ajusta permissões no arquivo de sites
+  lineinfile:
+    path: /etc/apache2/sites-available/000-default.conf
+    regexp: '^AssignUserId besta besta$'
+    line: 'AssignUserId besta besta'
+    insertafter: '^DocumentRoot.*'
+  notify: Reinicia Apache2
+
+- name: cria outro virtualhost
+  debug:
+    msg: "foi criado"
+  notify: Reinicia Apache2
+
+- name: cria diretorio
+  file:
+    state: directory
+    dest: /usr/src/kernel
+    
+- name: pega as parada
+  unarchive:
+    src: https://git.kernel.org/torvalds/t/linux-4.20-rc2.tar.gz
+    dest: /usr/src/kernel
+    remote_src: yes

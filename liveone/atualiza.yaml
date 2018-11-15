@@ -1,6 +1,7 @@
 ---
 - hosts: ataulfo
   become: true
+  gather_facts: yes
   tasks:
     - name: atualiza apt
       apt:

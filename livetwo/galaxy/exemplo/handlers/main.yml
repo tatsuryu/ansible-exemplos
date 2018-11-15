@@ -1,0 +1,6 @@
+---
+# handlers file for exemplo
+- name: Reinicia Apache2
+  service:
+    name: apache2
+    state: restarted

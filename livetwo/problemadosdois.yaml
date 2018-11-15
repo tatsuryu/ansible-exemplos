@@ -1,0 +1,19 @@
+---
+- hosts: vagrant
+  become: true
+  tasks:
+    - name: Instala apache2 no Debian
+      apt:
+        name: ['apache2','libapache2-mpm-itk', 'vim']
+        state: present
+        update_cache: yes
+        cache_valid_time: 90
+      when: ansible_distribution == 'Debian'
+
+    - name: Instala apache2 no CentOs
+      yum:
+        name: ['httpd', 'vim']
+        state: present
+      with_items:
+        - httpd
+      when: ansible_distribution == 'CentOS'

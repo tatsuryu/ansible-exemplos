@@ -1,0 +1,37 @@
+---
+- hosts: ataulfo
+  become: true
+  tasks:
+    - name: Instala apache2 no Debian
+      apt:
+        name: ['apache2','libapache2-mpm-itk', 'vim']
+        state: present
+        update_cache: yes
+        cache_valid_time: 90
+      when: ansible_distribution == 'Debian'
+
+    - name: Cria usuario besta
+      user:
+        name: besta
+        comment: Ozuario besta
+
+    - name: copiando nossa pagina
+      copy:
+        src: files/index.html
+        dest: /var/www/html/index.html
+        owner: besta
+        group: besta
+        mode: 0640
+
+    - name: Ajusta permissões no arquivo de sites
+      lineinfile:
+        path: /etc/apache2/sites-available/000-default.conf
+        regexp: '^AssignUserId besta besta$'
+        line: 'AssignUserId besta besta'
+        insertafter: '^DocumentRoot.*'
+      notify: Reinicia Apache2
+
+    - name: cria outro virtualhost
+      debug:
+        msg: "foi criado"
+      notify: Reinicia Apache2
